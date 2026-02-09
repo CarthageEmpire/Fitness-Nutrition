@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fitness & Nutrition Guide</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>💪 Fitness & Nutrition Guide</h1>
+    <p class="subtitle">Personalized gym, food & fitness guidance</p>
+
+    <div class="form">
+      <label>Weight (kg)</label>
+      <input type="number" id="weight" placeholder="e.g. 70">
+
+      <label>Height (cm)</label>
+      <input type="number" id="height" placeholder="e.g. 175">
+
+      <label>Goal</label>
+      <select id="goal">
+        <option value="lose">Lose Weight</option>
+        <option value="gain">Gain Muscle</option>
+        <option value="fit">Stay Fit</option>
+      </select>
+
+      <button onclick="generatePlan()">Get My Plan</button>
+    </div>
+
+    <div id="result" class="result"></div>
+
+    <p class="warning">
+      ⚠️ This website provides general fitness information only.
+      It is not medical advice.
+    </p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
