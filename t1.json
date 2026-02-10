@@ -1,0 +1,32 @@
+{
+  "users": {
+    "user_unique_id_123": {
+      "profile": {
+        "name": "Ahmed",
+        "start_date": "2023-10-27",
+        "current_goal": "lose_weight",
+        "activity_level": "sedentary"
+      },
+      "stats_history": {
+        "entry_001": {
+          "date": "2023-10-27",
+          "weight": 85.5,
+          "bmi": 27.5
+        },
+        "entry_002": {
+          "date": "2023-11-03",
+          "weight": 84.2,
+          "bmi": 26.9
+        }
+      },
+      "preferences": {
+        "diet_type": "tunisian_standard",
+        "workout_days": [
+          "Monday",
+          "Wednesday",
+          "Friday"
+        ]
+      }
+    }
+  }
+}
