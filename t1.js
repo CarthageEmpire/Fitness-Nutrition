@@ -42,8 +42,10 @@ const app = {
                 { name: "Bodyweight Squats", sets: 3, note: "Keep back straight" },
                 { name: "Push-ups (Knees if needed)", sets: 3, note: "Chest to floor" },
                 { name: "Lunges", sets: 3, note: "10 per leg" },
-                { name: "Plank Hold", sets: 3, note: "Hold as long as possible" },
+                { name: "hoes", sets: 3, note: "Hold as long as possible" },
                 { name: "Water Bottle Rows", sets: 3, note: "Squeeze back muscles" }
+                ,{ name: "Glute Bridges", sets: 3, note: "Squeeze glutes at top" }
+
             ]
         }
     },
@@ -95,26 +97,33 @@ const app = {
         const bmiText = document.getElementById('bmi-text');
         const marker = document.getElementById('bmi-marker');
         const alertBox = document.getElementById('health-alert');
+        const photo = document.getElementById('bmi-photo');
 
         bmiNum.innerText = bmi;
         
         let percentage = 0; // Position of the marker on the bar (0-100%)
         let category = "";
 
-        if (bmi < 18.5) {
+        const numBmi = Number(bmi);
+
+        if (numBmi < 18.5) {
             percentage = 15; category = "Underweight";
             alertBox.innerHTML = "⚠️ <strong>Note:</strong> Your weight is low. Focus on calorie-dense foods.";
             alertBox.classList.remove('hidden');
-        } else if (bmi < 24.9) {
+            if (photo) photo.classList.remove('hidden');
+        } else if (numBmi < 24.9) {
             percentage = 50; category = "Healthy Weight";
             alertBox.classList.add('hidden');
-        } else if (bmi < 29.9) {
+            if (photo) photo.classList.remove('hidden');
+        } else if (numBmi < 29.9) {
             percentage = 75; category = "Overweight";
             alertBox.classList.add('hidden');
+            if (photo) photo.classList.remove('hidden');
         } else {
             percentage = 95; category = "Obese";
             alertBox.innerHTML = "⚠️ <strong>Medical Note:</strong> Please consult a doctor before high-intensity training.";
             alertBox.classList.remove('hidden');
+            if (photo) photo.classList.add('hidden');
         }
 
         bmiText.innerText = category;

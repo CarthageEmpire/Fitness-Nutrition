@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartFit | Intelligent Fitness Guide</title>
+    <title>SmartFit AI | Intelligent Fitness Guide</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CSS STYLES --- */
+        /* --- CORE CSS STYLES --- */
         :root {
             --primary: #10b981;
             --primary-hover: #059669;
@@ -16,7 +16,6 @@
             --text-main: #1f2937;
             --text-muted: #6b7280;
             --border: #e5e7eb;
-            --danger: #ef4444;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
@@ -28,50 +27,83 @@
             --border: #374151;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; transition: background 0.3s, color 0.3s; }
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.3s ease; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
         .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
         .hidden { display: none !important; }
+        
+        /* Navigation */
         .navbar { padding: 20px 0; display: flex; justify-content: space-between; align-items: center; }
         .logo { font-weight: 800; font-size: 1.5rem; color: var(--primary); }
         .disclaimer-bar { background: #fee2e2; color: #991b1b; padding: 10px 0; font-size: 0.85rem; text-align: center; border-bottom: 1px solid #fca5a5; }
+        
+        /* Buttons */
         .btn-primary { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1rem; width: 100%; margin-top: 10px;}
         .btn-outline { background: transparent; border: 2px solid var(--text-muted); color: var(--text-main); padding: 8px 16px; border-radius: 6px; cursor: pointer; }
+        
+        /* Layout */
         .form-card { background: var(--card-bg); padding: 30px; border-radius: 16px; box-shadow: var(--shadow); max-width: 500px; margin: 40px auto; }
         .form-group { margin-bottom: 15px; text-align: left; }
         label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
         input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-color); color: var(--text-main); }
         .grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 20px; }
         .card { background: var(--card-bg); padding: 24px; border-radius: 16px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+        
+        /* Specifics */
         .gauge-container { height: 12px; background: linear-gradient(90deg, #3b82f6 0%, #10b981 35%, #eab308 70%, #ef4444 100%); border-radius: 6px; position: relative; margin: 20px 0; }
-        .gauge-marker { width: 4px; height: 20px; background: var(--text-main); position: absolute; top: -4px; }
+        .gauge-marker { width: 4px; height: 20px; background: var(--text-main); position: absolute; top: -4px; transition: left 0.5s ease; }
         .workout-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
         .workout-table th, .workout-table td { text-align: left; padding: 10px; border-bottom: 1px solid var(--border); }
         .check-list li { list-style: none; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 0.95rem;}
         .alert-box { background: #fff7ed; border-left: 4px solid #f97316; padding: 10px; margin-top: 10px; color: #9a3412; font-size: 0.85rem;}
+
+        /* --- CHATBOT CSS --- */
+        .chat-toggle-btn {
+            position: fixed; bottom: 20px; right: 20px; 
+            width: 60px; height: 60px; background: var(--primary); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); cursor: pointer; z-index: 1000;
+            color: white; font-size: 30px; border: none;
+        }
+        .chat-window {
+            position: fixed; bottom: 90px; right: 20px;
+            width: 350px; height: 450px; background: var(--card-bg);
+            border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: flex; flex-direction: column; overflow: hidden;
+            z-index: 1000; border: 1px solid var(--border);
+        }
+        .chat-header { background: var(--primary); color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between;}
+        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; font-size: 0.9rem; }
+        .chat-input-area { padding: 10px; border-top: 1px solid var(--border); display: flex; }
+        .chat-input-area input { flex: 1; margin-right: 10px; padding: 8px; }
+        .msg { padding: 8px 12px; border-radius: 10px; margin-bottom: 10px; max-width: 80%; }
+        .msg.bot { background: var(--bg-color); color: var(--text-main); align-self: flex-start; }
+        .msg.user { background: var(--primary); color: white; align-self: flex-end; margin-left: auto; }
+        
+        /* Animation for bot typing */
+        @keyframes blink { 50% { opacity: 0; } }
+        .typing { font-style: italic; color: #888; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
     <nav class="navbar container">
-        <div class="logo">SmartFit 🇹🇳</div>
+        <div class="logo">SmartFit <span style="font-size:1rem">🇹🇳 AI</span></div>
         <button id="theme-toggle" class="btn-outline">Toggle Mode</button>
     </nav>
 
-    <div class="disclaimer-bar">
-        <div class="container"><strong>⚠️ Disclaimer:</strong> Educational guidance only. Consult a doctor.</div>
-    </div>
+    
 
     <main class="container">
-        <section id="hero-section" style="text-align: center; padding: 80px 0;">
-            <h1>Fitness Made Simple.</h1>
-            <p style="margin: 20px 0; color: var(--text-muted);">Get your Tunisian-inspired nutrition and workout plan in 1 minute.</p>
-            <button class="btn-primary" style="max-width: 250px;" onclick="app.transitionTo('input-section')">Start Now</button>
+        <section id="hero-section" style="text-align: center; padding: 60px 0;">
+            <h1>Your Smart Fitness Companion.</h1>
+            <p style="margin: 20px 0; color: var(--text-muted);">Custom plans adapted to your body, allergies, and local food.</p>
+            <button class="btn-primary" style="max-width: 250px;" onclick="app.transitionTo('input-section')">Start Analysis</button>
         </section>
 
         <section id="input-section" class="hidden">
             <div class="form-card">
-                <h2>Your Stats</h2>
+                <h2>Your Profile</h2>
                 <div class="form-group">
                     <label>Weight (kg)</label>
                     <input type="number" id="weight" placeholder="75">
@@ -88,14 +120,18 @@
                         <option value="health">General Health</option>
                     </select>
                 </div>
-                <button class="btn-primary" onclick="app.generatePlan()">Get My Plan</button>
+                <button class="btn-primary" onclick="app.generatePlan()">Generate Plan</button>
             </div>
         </section>
 
         <section id="dashboard-section" class="hidden">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h2>Your Plan</h2>
-                <button class="btn-outline" onclick="app.transitionTo('input-section')">Edit</button>
+                <h2>Your Dashboard</h2>
+                <button class="btn-outline" onclick="app.transitionTo('input-section')">Reset</button>
+            </div>
+
+            <div id="ai-update-msg" class="alert-box hidden" style="background: #ecfdf5; border-color: #10b981; color: #047857;">
+                ✨ <strong>AI Update:</strong> Plan modified based on your preferences.
             </div>
 
             <div class="grid-layout">
@@ -108,7 +144,7 @@
                 </div>
 
                 <div class="card">
-                    <h3>🥗 Nutrition (TN)</h3>
+                    <h3>🥗 Nutrition Guide (TN)</h3>
                     <p id="macro-info" style="color: var(--primary); font-weight: 600; margin-bottom: 10px;"></p>
                     <ul id="meal-list" class="check-list"></ul>
                 </div>
@@ -116,7 +152,7 @@
                 <div class="card" style="grid-column: 1 / -1;">
                     <h3>🏋️ Workout Routine</h3>
                     <table class="workout-table">
-                        <thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th><th>Rest</th></tr></thead>
+                        <thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th></tr></thead>
                         <tbody id="workout-rows"></tbody>
                     </table>
                 </div>
@@ -124,20 +160,43 @@
         </section>
     </main>
 
+    <button class="chat-toggle-btn" onclick="chatbot.toggle()">💬</button>
+    <div id="chat-window" class="chat-window hidden">
+        <div class="chat-header">
+            <span>SmartFit Assistant</span>
+            <span style="cursor:pointer" onclick="chatbot.toggle()">✕</span>
+        </div>
+        <div id="chat-messages" class="chat-messages">
+            <div class="msg bot">Hello! Once you generate a plan, tell me if you have any allergies (gluten, fish) or conditions (diabetes) and I will fix your plan!</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="e.g. 'I have diabetes' or 'I hate fish'">
+            <button class="btn-primary" style="width: auto; margin:0;" onclick="chatbot.send()">Send</button>
+        </div>
+    </div>
+
     <script>
-        /* --- JAVASCRIPT LOGIC --- */
+        /* --- MAIN APP LOGIC --- */
         const app = {
+            state: {
+                currentMeals: [],
+                generated: false
+            },
             data: {
                 nutrition: {
                     lose: { title: "Fat Loss Plan", meals: ["Breakfast: Bsissa (water base)", "Lunch: Grilled Fish + Mechouia", "Dinner: Vegetable Soup (Chorba)"] },
-                    gain: { title: "Muscle Build Plan", meals: ["Breakfast: Oats + Dates + Milk", "Lunch: Couscous + Chicken", "Dinner: Lablabi + 2 Eggs"] },
-                    health: { title: "Balanced Plan", meals: ["Breakfast: Eggs + Olive Oil", "Lunch: Turkey Escalope + Rice", "Dinner: Tunisian Salad + Tuna"] }
+                    gain: { title: "Muscle Build Plan", meals: ["Breakfast: Oats + Dates + Milk", "Lunch: Couscous + Chicken", "Dinner: Lablabi (with egg/tuna)"] },
+                    health: { title: "Balanced Plan", meals: ["Breakfast: Whole Wheat Toast + Egg", "Lunch: Turkey Escalope + Rice", "Dinner: Tunisian Salad + Tuna"] }
                 },
                 exercises: ["Bodyweight Squats", "Push-ups", "Lunges", "Plank Hold", "Glute Bridges"]
             },
 
             init: () => {
                 document.getElementById('theme-toggle').onclick = () => document.body.classList.toggle('dark-mode');
+                // Allow enter key in chat
+                document.getElementById('chat-input').addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') chatbot.send();
+                });
             },
 
             transitionTo: (id) => {
@@ -153,7 +212,7 @@
 
                 if(!w || !h) return alert("Enter weight and height!");
 
-                // BMI
+                // BMI Calculation
                 const bmi = (w / ((h/100)**2)).toFixed(1);
                 document.getElementById('bmi-val').innerText = bmi;
                 
@@ -161,27 +220,136 @@
                 const alertBox = document.getElementById('health-alert');
                 alertBox.classList.add('hidden');
 
-                if(bmi < 18.5) { pos = 10; status = "Underweight"; alertBox.classList.remove('hidden'); alertBox.innerText = "Focus on increasing calories."; }
+                if(bmi < 18.5) { pos = 10; status = "Underweight"; alertBox.classList.remove('hidden'); alertBox.innerText = "Focus on calorie surplus."; }
                 else if(bmi > 25 && bmi < 29.9) { pos = 75; status = "Overweight"; }
-                else if(bmi >= 30) { pos = 95; status = "Obese"; alertBox.classList.remove('hidden'); alertBox.innerText = "Consult a doctor for a safe heart-rate range.";}
+                else if(bmi >= 30) { pos = 95; status = "Obese"; alertBox.classList.remove('hidden'); alertBox.innerText = "Please consult a doctor before intense exercise.";}
                 
                 document.getElementById('bmi-status').innerText = status;
                 document.getElementById('bmi-marker').style.left = pos + "%";
 
-                // Nutrition
-                const nutr = app.data.nutrition[g];
-                document.getElementById('macro-info').innerText = nutr.title;
-                const list = document.getElementById('meal-list');
-                list.innerHTML = nutr.meals.map(m => `<li>${m}</li>`).join('');
+                // Nutrition Render
+                app.state.currentMeals = [...app.data.nutrition[g].meals]; // Create copy
+                app.renderMeals(app.state.currentMeals);
+                document.getElementById('macro-info').innerText = app.data.nutrition[g].title;
 
-                // Workouts
+                // Workouts Render
                 const reps = g === 'lose' ? "15-20" : "8-12";
-                const rows = app.data.exercises.map(ex => `<tr><td>${ex}</td><td>3</td><td>${reps}</td><td>60s</td></tr>`).join('');
+                const rows = app.data.exercises.map(ex => `<tr><td>${ex}</td><td>3</td><td>${reps}</td></tr>`).join('');
                 document.getElementById('workout-rows').innerHTML = rows;
 
+                app.state.generated = true;
                 app.transitionTo('dashboard-section');
+            },
+
+            renderMeals: (mealArray) => {
+                const list = document.getElementById('meal-list');
+                list.innerHTML = mealArray.map(m => `<li>${m}</li>`).join('');
+            },
+            
+            showUpdateMessage: () => {
+                const msg = document.getElementById('ai-update-msg');
+                msg.classList.remove('hidden');
+                setTimeout(() => msg.classList.add('hidden'), 4000);
             }
         };
+
+        /* --- CHATBOT LOGIC --- */
+        const chatbot = {
+            toggle: () => {
+                document.getElementById('chat-window').classList.toggle('hidden');
+            },
+
+            send: () => {
+                const input = document.getElementById('chat-input');
+                const text = input.value.toLowerCase();
+                if(!text) return;
+
+                // 1. Add User Message
+                chatbot.addMsg(input.value, 'user');
+                input.value = "";
+
+                // 2. Simulate Thinking
+                chatbot.addMsg("Thinking...", 'bot typing');
+
+                setTimeout(() => {
+                    // Remove typing msg
+                    document.querySelector('.typing').remove();
+                    chatbot.processLogic(text);
+                }, 1000);
+            },
+
+            addMsg: (text, type) => {
+                const div = document.createElement('div');
+                div.className = `msg ${type}`;
+                div.innerText = text;
+                const container = document.getElementById('chat-messages');
+                container.appendChild(div);
+                container.scrollTop = container.scrollHeight;
+            },
+
+            processLogic: (text) => {
+                if(!app.state.generated) {
+                    chatbot.addMsg("Please generate your plan first so I can modify it!", 'bot');
+                    return;
+                }
+
+                let response = "I didn't quite catch that. Try saying 'I have diabetes' or 'I hate fish'.";
+                let modified = false;
+
+                // LOGIC 1: DIABETES
+                if(text.includes('diabetes') || text.includes('diabetic') || text.includes('sugar')) {
+                    app.state.currentMeals = app.state.currentMeals.map(m => {
+                        if(m.includes('Dates')) return m.replace('Dates', 'Berries');
+                        if(m.includes('Bread') || m.includes('Toast')) return m.replace(/Bread|Toast/g, 'Whole Grain Bread');
+                        if(m.includes('Couscous')) return m.replace('Couscous', 'Bulgur (Low GI)');
+                        return m;
+                    });
+                    response = "I've updated your plan for Diabetes: Swapped high-sugar dates for berries and refined grains for whole grains.";
+                    modified = true;
+                }
+
+                // LOGIC 2: NO FISH
+                else if((text.includes('hate') || text.includes('no') || text.includes('allergic')) && (text.includes('fish') || text.includes('tuna') || text.includes('seafood'))) {
+                    app.state.currentMeals = app.state.currentMeals.map(m => {
+                        if(m.includes('Fish') || m.includes('Tuna')) return m.replace(/Fish|Tuna/g, 'Grilled Chicken Breast');
+                        return m;
+                    });
+                    response = "No problem! I've removed all fish and replaced it with Chicken Breast.";
+                    modified = true;
+                }
+
+                // LOGIC 3: GLUTEN FREE
+                else if(text.includes('gluten') || text.includes('celiac')) {
+                    app.state.currentMeals = app.state.currentMeals.map(m => {
+                        if(m.includes('Couscous')) return m.replace('Couscous', 'Quinoa or Rice');
+                        if(m.includes('Bread') || m.includes('Toast') || m.includes('Bsissa')) return m.replace(/Bread|Toast|Bsissa/g, 'Gluten-Free Oats/Corn');
+                        return m;
+                    });
+                    response = "Understood. I've replaced Couscous, Bread, and Bsissa with Gluten-Free alternatives like Rice and Corn.";
+                    modified = true;
+                }
+
+                // LOGIC 4: VEGETARIAN
+                else if(text.includes('vegetarian') || text.includes('vegan') || text.includes('meat')) {
+                    app.state.currentMeals = app.state.currentMeals.map(m => {
+                        if(m.includes('Chicken') || m.includes('Turkey') || m.includes('Fish') || m.includes('Tuna') || m.includes('Meat')) {
+                            return "Lentil Stew or Chickpea Salad (Vegetarian)";
+                        }
+                        return m;
+                    });
+                    response = "I've switched your protein sources to plants (Lentils and Chickpeas).";
+                    modified = true;
+                }
+
+                chatbot.addMsg(response, 'bot');
+                
+                if(modified) {
+                    app.renderMeals(app.state.currentMeals);
+                    app.showUpdateMessage();
+                }
+            }
+        };
+
         app.init();
     </script>
 </body>
